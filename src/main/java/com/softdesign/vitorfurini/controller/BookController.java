@@ -1,6 +1,5 @@
 package com.softdesign.vitorfurini.controller;
 
-import com.softdesign.vitorfurini.dto.BookDTO;
 import com.softdesign.vitorfurini.model.Book;
 import com.softdesign.vitorfurini.responses.Response;
 import com.softdesign.vitorfurini.service.BookService;
@@ -28,19 +27,19 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBookById(@PathVariable(name = "id") String id) {
-        var response = bookService.listById(id);
+        var response = bookService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/findByname/{name}")
-    public ResponseEntity<Object> getBookByName(@PathVariable(name = "name") String id) {
-        var response = bookService.findByName(id);
+    public ResponseEntity<Object> getBookByName(@PathVariable(name = "name") String name) {
+        var response = bookService.findByName(name);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/findByAuthor/{authorName}")
-    public ResponseEntity<Object> getBookByAuthor(@PathVariable(name = "authorName") String id) {
-        var response = bookService.findByAuthor(id);
+    public ResponseEntity<Object> getBookByAuthor(@PathVariable(name = "authorName") String authorName) {
+        var response = bookService.findByAuthor(authorName);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

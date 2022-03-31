@@ -10,7 +10,7 @@ public interface BookService {
 
     List<Book> listAll();
 
-    Optional<Book> listById(String id);
+    Optional<Book> findById(String id);
 
     Collection<Object> findByName(String name);
 

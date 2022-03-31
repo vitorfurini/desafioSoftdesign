@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class VitorfuriniApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VitorfuriniApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(VitorfuriniApplication.class, args);
+    }
 
 }

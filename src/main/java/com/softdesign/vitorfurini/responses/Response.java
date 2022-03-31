@@ -18,8 +18,8 @@ public class Response<T> {
         this.data = data;
     }
 
-    public Response(List<String> errors){
-    this.errors = errors;
+    public Response(List<String> errors) {
+        this.errors = errors;
     }
 
 }

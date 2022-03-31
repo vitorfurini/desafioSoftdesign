@@ -48,11 +48,12 @@ public class CrudBookController {
             return ResponseEntity.badRequest().body(new Response<Book>(errors));
         }
 
-        return ResponseEntity.ok(new Response<Book>(this.crudBookService.updateBook(Optional.ofNullable(book))));
+        return ResponseEntity.ok(new Response<Book>(this.crudBookService.updateBook(Optional.ofNullable(book), id)));
     }
 
     @PutMapping(path = "updateRented/{id}")
-    public ResponseEntity<Response<Book>> updateBookRented(@PathVariable(name = "id") String id, @Valid @RequestBody boolean rented, BindingResult result) {
+    public ResponseEntity<Response<Book>> updateBookRented(@PathVariable(name = "id") String id,
+            @Valid @RequestBody BookDTO bookDTO, boolean rented, BindingResult result) {
 
         var response = this.crudBookService.getRented(id);
 
@@ -71,7 +72,7 @@ public class CrudBookController {
             result.getAllErrors().forEach(erro -> errors.add(erro.getDefaultMessage()));
             return ResponseEntity.badRequest().body(new Response<Book>(errors));
         }
-        return ResponseEntity.ok(new Response<Book>(this.crudBookService.updateBook(response)));
+        return ResponseEntity.ok(new Response<Book>(this.crudBookService.updateBook(response, id)));
     }
 
     @DeleteMapping("/delete/{id}")

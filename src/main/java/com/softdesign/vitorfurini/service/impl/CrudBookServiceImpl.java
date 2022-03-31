@@ -2,20 +2,27 @@ package com.softdesign.vitorfurini.service.impl;
 
 import com.softdesign.vitorfurini.dto.BookDTO;
 import com.softdesign.vitorfurini.exceptions.DuplicatedItemException;
-import com.softdesign.vitorfurini.exceptions.NotFoundException;
 import com.softdesign.vitorfurini.model.Book;
 import com.softdesign.vitorfurini.repository.BookRepository;
 import com.softdesign.vitorfurini.service.CrudBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+
 
 @Service
 public class CrudBookServiceImpl implements CrudBookService {
 
     @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
+
+    public CrudBookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     public Book createBook(BookDTO book) {
@@ -29,25 +36,44 @@ public class CrudBookServiceImpl implements CrudBookService {
     }
 
     @Override
-    public Book updateBook(Optional<BookDTO> book) {
+    public Book updateBook(Optional<BookDTO> book, String id) {
 
-        if (bookAlreadyExists(book.orElseThrow().getName())) {
-            throw new NotFoundException();
+        var bookDto = bookRepository.findById(id);
+
+        if (bookDto.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            Book bookUpdate = bookDto.get();
+            bookUpdate.setAuthor(book.orElseThrow().getAuthor());
+            bookUpdate.setName(book.orElseThrow().getName());
+            bookUpdate.setChapter(book.orElseThrow().getChapter());
+            bookUpdate.setRented(book.orElseThrow().isRented());
+            return this.bookRepository.save(bookUpdate);
         }
 
-        var bookUpdate = new Book(
-                book.orElseThrow().getAuthor(),
-                book.orElseThrow().getName(),
-                book.orElseThrow().getChapter(),
-                book.orElseThrow().isRented());
-
-        return this.bookRepository.save(bookUpdate);
     }
 
+    @Override
+    public Book updateRentedBook(boolean rented, String id) {
+        var bookDto = bookRepository.findById(id);
+        if (bookDto.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            Book bookUpdate = bookDto.get();
+            bookUpdate.setRented(rented);
+            return this.bookRepository.save(bookUpdate);
+        }
+    }
 
     @Override
-    public void deleteBook(String id) {
-        this.bookRepository.deleteById(id);
+    public ResponseEntity<Object> deleteBook(String id) {
+
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            bookRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else
+            return ResponseEntity.notFound().build();
     }
 
     @Override
@@ -55,7 +81,11 @@ public class CrudBookServiceImpl implements CrudBookService {
 
         var book1 = this.bookRepository.findById(id);
 
-        var book = new BookDTO(book1.stream().sequential());
+        var book = new BookDTO();
+        book.setName(book1.orElseThrow().getName());
+        book.setRented(book1.orElseThrow().isRented());
+        book.setChapter(book1.orElseThrow().getChapter());
+        book.setAuthor(book1.orElseThrow().getAuthor());
 
         return Optional.of(book);
     }
