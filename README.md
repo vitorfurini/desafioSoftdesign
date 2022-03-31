@@ -1,4 +1,4 @@
-# desafioSoftdesign
+# desafio para fins de avaliação
 
 <h2> Descrição</h2>
 O projeto foi desenvolvido para gerenciar livros em uma base de dados não relacional. Foram criados endpoints para criação, edição, deleção, busca por id, busca por filtros.
