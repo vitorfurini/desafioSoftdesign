@@ -1,8 +1,19 @@
 package com.softdesign.vitorfurini.service;
 
-public class BookService {
-    public Object getBookById(Long id) {
+import com.softdesign.vitorfurini.model.Book;
 
-        return null;
-    }
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+public interface BookService {
+
+    List<Book> listAll();
+
+    Optional<Book> listById(String id);
+
+    Collection<Object> findByName(String name);
+
+    Collection<Object> findByAuthor(String author);
+
 }
