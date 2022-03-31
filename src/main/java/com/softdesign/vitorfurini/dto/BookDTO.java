@@ -24,7 +24,4 @@ public class BookDTO {
     private String chapter;
     @NotNull
     private boolean rented;
-
-    public BookDTO(Stream<Book> sequential) {
-    }
 }

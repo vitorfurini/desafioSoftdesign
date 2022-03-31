@@ -44,8 +44,9 @@ public class CrudBookServiceImplTest {
     public void updateBook() {
 
         when(bookRepository.save(getMock())).thenReturn(getMock());
+        when(bookRepository.findById("62451e029f45512f491393a2")).thenReturn(Optional.of(getMock()));
 
-        bookService.updateBook(Optional.ofNullable(getDtoMock()), "6244d10e920cb429d33b2bc2");
+        bookService.updateBook(Optional.ofNullable(getDtoMock()), "62451e029f45512f491393a2");
 
         verify(bookRepository, times(1)).save(getMock());
     }
